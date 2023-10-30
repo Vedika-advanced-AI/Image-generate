@@ -22,11 +22,8 @@ previous_num_of_images = 0
 
 def generate_text_to_image(
     prompt,
-    image_height,
-    image_width,
     inference_steps,
     guidance_scale,
-    num_images,
     seed,
     use_openvino,
     use_safety_checker,
@@ -41,11 +38,11 @@ def generate_text_to_image(
     lcm_diffusion_settings = LCMDiffusionSetting(
         lcm_model_id=model_id,
         prompt=prompt,
-        image_height=image_height,
-        image_width=image_width,
+        image_height=384,
+        image_width=384,
         inference_steps=inference_steps,
         guidance_scale=guidance_scale,
-        number_of_images=num_images,
+        number_of_images=1,
         seed=seed,
         use_openvino=use_openvino,
         use_safety_checker=use_safety_checker,
@@ -58,23 +55,23 @@ def generate_text_to_image(
     if use_openvino:
         reshape = is_reshape_required(
             previous_width,
-            image_width,
+            384,
             previous_height,
-            image_height,
+            384,
             previous_model_id,
             model_id,
             previous_num_of_images,
-            num_images,
+            1,
         )
     images = context.generate_text_to_image(
         settings,
         reshape,
         DEVICE,
     )
-    previous_width = image_width
-    previous_height = image_height
+    previous_width = 384
+    previous_height = 384
     previous_model_id = model_id
-    previous_num_of_images = num_images
+    previous_num_of_images = 1
 
     return images
 
@@ -138,27 +135,24 @@ def get_text_to_image_ui(app_settings: AppSettings) -> None:
                     num_inference_steps = gr.Slider(
                         1, 8, value=4, step=1, label="Inference Steps"
                     )
-                    image_height = gr.Slider(
-                        256, 768, value=512, step=256, label="Image Height"
-                    )
-                    image_width = gr.Slider(
-                        256, 768, value=512, step=256, label="Image Width"
-                    )
-                    num_images = gr.Slider(
-                        1,
-                        50,
-                        value=1,
-                        step=1,
-                        label="Number of images to generate",
-                    )
+                    # image_height = gr.Slider(
+                    #     256, 768, value=384, step=64, label="Image Height",interactive=Fa
+                    # )
+                    # image_width = gr.Slider(
+                    #     256, 768, value=384, step=64, label="Image Width"
+                    # )
+                    # num_images = gr.Slider(
+                    #     1,
+                    #     50,
+                    #     value=1,
+                    #     step=1,
+                    #     label="Number of images to generate",
+                    # )
 
                     input_params = [
                         prompt,
-                        image_height,
-                        image_width,
                         num_inference_steps,
                         guidance_scale,
-                        num_images,
                         seed,
                         openvino_checkbox,
                         safety_checker_checkbox,
