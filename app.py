@@ -6,7 +6,7 @@ from context import Context
 from constants import APP_VERSION, LCM_DEFAULT_MODEL_OPENVINO
 from models.interface_types import InterfaceType
 from constants import DEVICE
-
+from frontend.webui.ui import start_webui
 parser = ArgumentParser(description=f"FAST SD CPU {constants.APP_VERSION}")
 parser.add_argument(
     "-s",
