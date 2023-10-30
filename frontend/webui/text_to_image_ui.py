@@ -10,6 +10,9 @@ from frontend.utils import is_reshape_required
 from app_settings import AppSettings
 from constants import DEVICE
 from frontend.utils import enable_openvino_controls
+from scipy.ndimage import zoom
+import numpy as np
+from PIL import Image
 
 random_enabled = True
 
@@ -72,8 +75,13 @@ def generate_text_to_image(
     previous_height = 384
     previous_model_id = model_id
     previous_num_of_images = 1
+    out_images = []
+    for image in images:
+        img_arr = np.array(image)
+        upscaled_image = zoom(img_arr, (2, 2, 1), order=3)
+        out_images.append(Image.fromarray(upscaled_image.astype(np.uint8)))
 
-    return images
+    return out_images
 
 
 def get_text_to_image_ui(app_settings: AppSettings) -> None:
