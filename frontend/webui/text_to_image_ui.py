@@ -106,22 +106,7 @@ def get_text_to_image_ui(app_settings: AppSettings) -> None:
                         elem_id="generate_button",
                         scale=0,
                     )
-                num_inference_steps = gr.Slider(
-                    1, 25, value=4, step=1, label="Inference Steps"
-                )
-                image_height = gr.Slider(
-                    256, 768, value=512, step=256, label="Image Height"
-                )
-                image_width = gr.Slider(
-                    256, 768, value=512, step=256, label="Image Width"
-                )
-                num_images = gr.Slider(
-                    1,
-                    50,
-                    value=1,
-                    step=1,
-                    label="Number of images to generate",
-                )
+
                 with gr.Accordion("Advanced options", open=False):
                     guidance_scale = gr.Slider(
                         1.0, 30.0, value=8, step=0.5, label="Guidance Scale"
@@ -149,6 +134,22 @@ def get_text_to_image_ui(app_settings: AppSettings) -> None:
                         label="Use Safety Checker",
                         value=True,
                         interactive=True,
+                    )
+                    num_inference_steps = gr.Slider(
+                        1, 8, value=4, step=1, label="Inference Steps"
+                    )
+                    image_height = gr.Slider(
+                        256, 768, value=512, step=256, label="Image Height"
+                    )
+                    image_width = gr.Slider(
+                        256, 768, value=512, step=256, label="Image Width"
+                    )
+                    num_images = gr.Slider(
+                        1,
+                        50,
+                        value=1,
+                        step=1,
+                        label="Number of images to generate",
                     )
 
                     input_params = [
