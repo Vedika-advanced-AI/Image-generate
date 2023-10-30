@@ -1,0 +1,13 @@
+accelerate==0.23.0
+diffusers==0.21.4
+transformers==4.34.0
+PyQt5
+Pillow==9.4.0
+openvino==2023.1.0
+optimum-intel==1.11.0
+onnx==1.14.1
+onnxruntime==1.16.1
+pydantic==2.4.2
+typing-extensions==4.8.0
+pyyaml
+gradio==3.39.0
