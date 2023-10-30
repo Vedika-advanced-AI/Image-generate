@@ -141,8 +141,8 @@ def get_text_to_image_ui(app_settings: AppSettings) -> None:
 
                     openvino_checkbox = gr.Checkbox(
                         label="Use OpenVINO",
-                        value=False,
-                        interactive=enable_openvino_controls(),
+                        value=True,
+                        interactive=False,
                     )
 
                     safety_checker_checkbox = gr.Checkbox(
