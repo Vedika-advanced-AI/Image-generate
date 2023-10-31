@@ -77,9 +77,7 @@ def generate_text_to_image(
     previous_num_of_images = 1
     out_images = []
     for image in images:
-        img_arr = np.array(image)
-        upscaled_image = zoom(img_arr, (2, 2, 1), order=3)
-        out_images.append(Image.fromarray(upscaled_image.astype(np.uint8)))
+        out_images.append(image.resize((768, 768),resample=Image.LANCZOS))
 
     return out_images
 
