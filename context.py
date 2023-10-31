@@ -35,10 +35,10 @@ class Context:
             reshape,
         )
         elapsed = time() - tick
-        ImageSaver.save_images(
-            settings.results_path,
-            images=images,
-            lcm_diffusion_setting=settings.lcm_diffusion_setting,
-        )
+        # ImageSaver.save_images(
+        #     settings.results_path,
+        #     images=images,
+        #     lcm_diffusion_setting=settings.lcm_diffusion_setting,
+        # )
         print(f"Elapsed time : {elapsed:.2f} seconds")
         return images
