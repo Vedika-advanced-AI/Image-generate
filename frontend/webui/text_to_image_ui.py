@@ -81,7 +81,9 @@ def generate_text_to_image(
         #out_images.append(image.resize((768, 768),resample=Image.LANCZOS))
         in_image = ImageLoader.load_image(image)
         up_image =upscaler(in_image)
-        out_images.append(up_image)
+        transform = T.ToPILImage()
+        pil_img=transform(up_image.squeeze())
+        out_images.append(pil_img)
        
     return out_images
 
