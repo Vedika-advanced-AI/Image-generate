@@ -14,7 +14,7 @@ from scipy.ndimage import zoom
 import numpy as np
 from PIL import Image
 from super_image import CarnModel,ImageLoader
-import torchvision.transforms as T
+import cv2
 
 random_enabled = True
 
@@ -81,10 +81,11 @@ def generate_text_to_image(
     for image in images:
         #out_images.append(image.resize((768, 768),resample=Image.LANCZOS))
         in_image = ImageLoader.load_image(image)
-        up_image =upscaler(in_image)
-        transform = T.ToPILImage()
-        pil_img=transform(up_image.squeeze())
-        out_images.append(pil_img)
+        up_image = upscaler(in_image)
+        up_image = up_image.data.cpu().numpy()
+        up_image = up_image[0].transpose((1, 2, 0)) * 255.0
+        up_image = cv2.cvtColor(up_image, cv2.COLOR_BGR2RGB)
+        out_images.append(Image.fromarray(up_image))
        
     return out_images
 
