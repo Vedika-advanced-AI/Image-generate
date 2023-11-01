@@ -11,3 +11,4 @@ pydantic==2.4.2
 typing-extensions==4.8.0
 pyyaml
 gradio==3.39.0
+super-image==0.1.7

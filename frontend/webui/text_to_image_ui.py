@@ -13,6 +13,7 @@ from frontend.utils import enable_openvino_controls
 from scipy.ndimage import zoom
 import numpy as np
 from PIL import Image
+from super_image import CarnModel,ImageLoader
 
 random_enabled = True
 
@@ -21,7 +22,7 @@ previous_width = 0
 previous_height = 0
 previous_model_id = ""
 previous_num_of_images = 0
-
+upscaler = CarnModel.from_pretrained('eugenesiow/carn-bam', scale=2) 
 
 def generate_text_to_image(
     prompt,
@@ -77,8 +78,11 @@ def generate_text_to_image(
     previous_num_of_images = 1
     out_images = []
     for image in images:
-        out_images.append(image.resize((768, 768),resample=Image.LANCZOS))
-
+        #out_images.append(image.resize((768, 768),resample=Image.LANCZOS))
+        in_image = ImageLoader.load_image(image)
+        up_image =upscaler(in_image)
+        out_images.append(up_image)
+       
     return out_images
 
 
