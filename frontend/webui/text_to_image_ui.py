@@ -13,8 +13,16 @@ from frontend.utils import enable_openvino_controls
 from scipy.ndimage import zoom
 import numpy as np
 from PIL import Image
-from super_image import CarnModel,ImageLoader
-import cv2
+from super_image import CarnModel, ImageLoader
+from torchvision import transforms
+
+transform_image = transforms.ToPILImage()
+
+
+def tensor2img(tensor):
+    tensor = tensor.squeeze(0).cpu().clamp(0, 1)
+    return transform_image(tensor)
+
 
 random_enabled = True
 
@@ -23,7 +31,8 @@ previous_width = 0
 previous_height = 0
 previous_model_id = ""
 previous_num_of_images = 0
-upscaler = CarnModel.from_pretrained('eugenesiow/carn-bam', scale=2) 
+upscaler = CarnModel.from_pretrained("eugenesiow/carn-bam", scale=2)
+
 
 def generate_text_to_image(
     prompt,
@@ -79,14 +88,11 @@ def generate_text_to_image(
     previous_num_of_images = 1
     out_images = []
     for image in images:
-        #out_images.append(image.resize((768, 768),resample=Image.LANCZOS))
+        # out_images.append(image.resize((768, 768),resample=Image.LANCZOS))
         in_image = ImageLoader.load_image(image)
         up_image = upscaler(in_image)
-        up_image = up_image.data.cpu().numpy()
-        up_image = up_image[0].transpose((1, 2, 0)) * 255.0
-        up_image = cv2.cvtColor(up_image, cv2.COLOR_BGR2RGB)
-        out_images.append(Image.fromarray(up_image))
-       
+        out_images.append(tensor2img(up_image))
+
     return out_images
 
 
