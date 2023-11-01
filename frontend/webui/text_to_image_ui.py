@@ -14,6 +14,7 @@ from scipy.ndimage import zoom
 import numpy as np
 from PIL import Image
 from super_image import CarnModel,ImageLoader
+import torchvision.transforms as T
 
 random_enabled = True
 
