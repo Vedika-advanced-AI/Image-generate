@@ -87,14 +87,14 @@ def generate_text_to_image(
     previous_model_id = model_id
     previous_num_of_images = 1
     out_images = []
-    for image in images:
-        out_images.append(image.resize((768, 768), resample=Image.LANCZOS))
-        # in_image = ImageLoader.load_image(image)
-        # up_image = upscaler(in_image)
-        # out_images.append(tensor2img(up_image))
-        # out_images(image)
+    # for image in images:
+    #     out_images.append(image.resize((768, 768), resample=Image.LANCZOS))
+    #     # in_image = ImageLoader.load_image(image)
+    #     # up_image = upscaler(in_image)
+    #     # out_images.append(tensor2img(up_image))
+    #     # out_images(image)
 
-    return out_images
+    return images
 
 
 def get_text_to_image_ui(app_settings: AppSettings) -> None:
