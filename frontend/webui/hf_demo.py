@@ -94,7 +94,7 @@ with gr.Blocks(css=css) as demo:
     with gr.Column(elem_id="container"):
         use_openvino = "- OpenVINO" if is_openvino_device() else ""
         gr.Markdown(
-            f"""#FastSD CPU demo {use_openvino}
+            f"""# FastSD CPU {use_openvino}
                **Device : {DEVICE.upper()} , {get_device_name()}**
             """,
             elem_id="intro",
@@ -132,12 +132,10 @@ with gr.Blocks(css=css) as demo:
         gr.HTML(_get_footer_message())
 
         inputs = [prompt, steps, seed]
-        prompt.input(fn=predict, inputs=inputs, show_progress=False)
-        generate_btn.click(
-            fn=predict, inputs=inputs, outputs=image, show_progress=False
-        )
-        steps.change(fn=predict, inputs=inputs, show_progress=False)
-        seed.change(fn=predict, inputs=inputs, show_progress=False)
+        prompt.input(fn=predict, inputs=inputs)
+        generate_btn.click(fn=predict, inputs=inputs, outputs=image)
+        steps.change(fn=predict, inputs=inputs)
+        seed.change(fn=predict, inputs=inputs)
 
 
 def start_demo_text_to_image(share=False):
