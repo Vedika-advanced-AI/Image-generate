@@ -1,5 +1,7 @@
 from constants import DEVICE
+from typing import List
 import platform
+from backend.device import is_openvino_device
 
 
 def is_reshape_required(
@@ -12,9 +14,6 @@ def is_reshape_required(
     prev_num_of_images: int,
     cur_num_of_images: int,
 ) -> bool:
-    print(f"width - {prev_width} {cur_width}")
-    print(f"height - {prev_height} {cur_height}")
-    print(f"model - {prev_model} {cur_model}")
     reshape_required = False
     if (
         prev_width != cur_width
@@ -29,4 +28,23 @@ def is_reshape_required(
 
 
 def enable_openvino_controls() -> bool:
-    return DEVICE == "cpu" and platform.system().lower() != "darwin"
+    return is_openvino_device() and platform.system().lower() != "darwin"
+
+
+def get_valid_model_id(
+    models: List,
+    model_id: str,
+) -> str:
+    if len(models) == 0:
+        print("Error: model configuration file is empty,please add some models.")
+        return ""
+    if model_id == "":
+        return models[0]
+
+    if model_id in models:
+        return model_id
+    else:
+        print(
+            f"Error:{model_id} Model not found in configuration file,so using first model : {models[0]}"
+        )
+        return models[0]

@@ -10,19 +10,6 @@ from frontend.utils import is_reshape_required
 from app_settings import AppSettings
 from constants import DEVICE
 from frontend.utils import enable_openvino_controls
-from scipy.ndimage import zoom
-import numpy as np
-from PIL import Image
-from super_image import CarnModel, ImageLoader
-from torchvision import transforms
-
-transform_image = transforms.ToPILImage()
-
-
-def tensor2img(tensor):
-    tensor = tensor.squeeze(0).cpu().clamp(0, 1)
-    return transform_image(tensor)
-
 
 random_enabled = True
 
@@ -31,16 +18,19 @@ previous_width = 0
 previous_height = 0
 previous_model_id = ""
 previous_num_of_images = 0
-upscaler = CarnModel.from_pretrained("eugenesiow/carn-bam", scale=2)
 
 
 def generate_text_to_image(
     prompt,
+    image_height,
+    image_width,
     inference_steps,
     guidance_scale,
+    num_images,
     seed,
     use_openvino,
     use_safety_checker,
+    tiny_auto_encoder_checkbox,
 ) -> Any:
     global previous_height, previous_width, previous_model_id, previous_num_of_images
     model_id = LCM_DEFAULT_MODEL
@@ -52,15 +42,16 @@ def generate_text_to_image(
     lcm_diffusion_settings = LCMDiffusionSetting(
         lcm_model_id=model_id,
         prompt=prompt,
-        image_height=384,
-        image_width=384,
+        image_height=image_height,
+        image_width=image_width,
         inference_steps=inference_steps,
         guidance_scale=guidance_scale,
-        number_of_images=1,
+        number_of_images=num_images,
         seed=seed,
         use_openvino=use_openvino,
         use_safety_checker=use_safety_checker,
         use_seed=use_seed,
+        use_tiny_auto_encoder=tiny_auto_encoder_checkbox,
     )
     settings = Settings(
         lcm_diffusion_setting=lcm_diffusion_settings,
@@ -69,30 +60,23 @@ def generate_text_to_image(
     if use_openvino:
         reshape = is_reshape_required(
             previous_width,
-            384,
+            image_width,
             previous_height,
-            384,
+            image_height,
             previous_model_id,
             model_id,
             previous_num_of_images,
-            1,
+            num_images,
         )
     images = context.generate_text_to_image(
         settings,
         reshape,
         DEVICE,
     )
-    previous_width = 384
-    previous_height = 384
+    previous_width = image_width
+    previous_height = image_height
     previous_model_id = model_id
-    previous_num_of_images = 1
-    out_images = []
-    # for image in images:
-    #     out_images.append(image.resize((768, 768), resample=Image.LANCZOS))
-    #     # in_image = ImageLoader.load_image(image)
-    #     # up_image = upscaler(in_image)
-    #     # out_images.append(tensor2img(up_image))
-    #     # out_images(image)
+    previous_num_of_images = num_images
 
     return images
 
@@ -124,10 +108,25 @@ def get_text_to_image_ui(app_settings: AppSettings) -> None:
                         elem_id="generate_button",
                         scale=0,
                     )
-
+                num_inference_steps = gr.Slider(
+                    1, 25, value=4, step=1, label="Inference Steps"
+                )
+                image_height = gr.Slider(
+                    256, 768, value=512, step=256, label="Image Height"
+                )
+                image_width = gr.Slider(
+                    256, 768, value=512, step=256, label="Image Width"
+                )
+                num_images = gr.Slider(
+                    1,
+                    50,
+                    value=1,
+                    step=1,
+                    label="Number of images to generate",
+                )
                 with gr.Accordion("Advanced options", open=False):
                     guidance_scale = gr.Slider(
-                        1.0, 30.0, value=8, step=0.5, label="Guidance Scale"
+                        1.0, 2.0, value=1.0, step=0.5, label="Guidance Scale"
                     )
 
                     seed = gr.Number(
@@ -144,8 +143,8 @@ def get_text_to_image_ui(app_settings: AppSettings) -> None:
 
                     openvino_checkbox = gr.Checkbox(
                         label="Use OpenVINO",
-                        value=True,
-                        interactive=False,
+                        value=False,
+                        interactive=enable_openvino_controls(),
                     )
 
                     safety_checker_checkbox = gr.Checkbox(
@@ -153,30 +152,23 @@ def get_text_to_image_ui(app_settings: AppSettings) -> None:
                         value=True,
                         interactive=True,
                     )
-                    num_inference_steps = gr.Slider(
-                        1, 8, value=4, step=1, label="Inference Steps"
+                    tiny_auto_encoder_checkbox = gr.Checkbox(
+                        label="Use tiny auto encoder for SD",
+                        value=False,
+                        interactive=True,
                     )
-                    # image_height = gr.Slider(
-                    #     256, 768, value=384, step=64, label="Image Height",interactive=Fa
-                    # )
-                    # image_width = gr.Slider(
-                    #     256, 768, value=384, step=64, label="Image Width"
-                    # )
-                    # num_images = gr.Slider(
-                    #     1,
-                    #     50,
-                    #     value=1,
-                    #     step=1,
-                    #     label="Number of images to generate",
-                    # )
 
                     input_params = [
                         prompt,
+                        image_height,
+                        image_width,
                         num_inference_steps,
                         guidance_scale,
+                        num_images,
                         seed,
                         openvino_checkbox,
                         safety_checker_checkbox,
+                        tiny_auto_encoder_checkbox,
                     ]
 
             with gr.Column():

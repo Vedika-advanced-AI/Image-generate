@@ -9,7 +9,7 @@ def join_paths(
     return os.path.join(first_path, second_path)
 
 
-def get_app_path():
+def get_app_path() -> str:
     app_dir = os.path.dirname(__file__)
     work_dir = os.path.dirname(app_dir)
     return work_dir
@@ -36,7 +36,7 @@ class FastStableDiffusionPaths:
         return results_path
 
     @staticmethod
-    def get_css_path():
+    def get_css_path() -> str:
         app_dir = os.path.dirname(__file__)
         css_path = os.path.join(
             app_dir,
@@ -46,3 +46,12 @@ class FastStableDiffusionPaths:
             "style.css",
         )
         return css_path
+
+    @staticmethod
+    def get_models_config_path(model_config_file: str) -> str:
+        configs_path = get_configs_path()
+        models_path = join_paths(
+            configs_path,
+            model_config_file,
+        )
+        return models_path
