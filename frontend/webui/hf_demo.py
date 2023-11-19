@@ -94,7 +94,7 @@ with gr.Blocks(css=css) as demo:
     with gr.Column(elem_id="container"):
         use_openvino = "- OpenVINO" if is_openvino_device() else ""
         gr.Markdown(
-            f"""FastSD CPU demo {use_openvino}
+            f"""#FastSD CPU demo {use_openvino}
                **Device : {DEVICE.upper()} , {get_device_name()}**
             """,
             elem_id="intro",

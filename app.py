@@ -156,4 +156,4 @@ print(
 from frontend.webui.hf_demo import start_demo_text_to_image
 
 print("Starting demo text to image")
-start_demo_text_to_image(True)
+start_demo_text_to_image(False)
