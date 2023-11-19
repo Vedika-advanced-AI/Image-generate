@@ -133,10 +133,7 @@ with gr.Blocks(css=css) as demo:
         gr.HTML(_get_footer_message())
 
         inputs = [prompt, steps, seed]
-        prompt.input(fn=predict, inputs=inputs)
         generate_btn.click(fn=predict, inputs=inputs, outputs=image)
-        steps.change(fn=predict, inputs=inputs)
-        seed.change(fn=predict, inputs=inputs)
 
 
 def start_demo_text_to_image(share=False):
