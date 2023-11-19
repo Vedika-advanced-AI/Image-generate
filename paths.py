@@ -10,7 +10,7 @@ def join_paths(
 
 
 def get_app_path() -> str:
-    app_dir = os.path.dirname(__file__)
+    app_dir = os.getcwd()
     work_dir = os.path.dirname(app_dir)
     return work_dir
 
