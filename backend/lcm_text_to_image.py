@@ -188,6 +188,8 @@ class LCMTextToImage:
     ) -> None:
         self.device = device
         self.use_openvino = use_openvino
+        print(f"use_openvino {self.use_openvino}")
+        print(f"is_openvino {is_openvino_device()}")
         if (
             self.pipeline is None
             or self.previous_model_id != model_id

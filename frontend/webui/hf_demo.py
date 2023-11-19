@@ -39,7 +39,7 @@ def predict(
         model_id=LCM_DEFAULT_MODEL_OPENVINO,
         use_lora=False,
         lcm_lora=lcm_lora,
-        use_openvino=True if is_openvino_device() else False,
+        use_openvino=True,
     )
 
     lcm_diffusion_setting = LCMDiffusionSetting()
