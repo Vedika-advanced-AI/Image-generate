@@ -9,6 +9,7 @@ import base64
 from backend.device import get_device_name
 from constants import APP_VERSION
 from backend.device import is_openvino_device
+import PIL
 
 lcm_text_to_image = LCMTextToImage()
 lcm_lora = LCMLora(
@@ -41,7 +42,7 @@ def predict(
         use_lora=False,
         lcm_lora=lcm_lora,
     )
-
+    print(f"prompt - {prompt}")
     lcm_diffusion_setting = LCMDiffusionSetting()
     lcm_diffusion_setting.prompt = prompt
     lcm_diffusion_setting.guidance_scale = 1.0
@@ -55,7 +56,7 @@ def predict(
     images = lcm_text_to_image.generate(lcm_diffusion_setting)
     latency = perf_counter() - start
     print(f"Latency: {latency:.2f} seconds")
-    return images[0]
+    return images[0].resize([512, 512], PIL.Image.ANTIALIAS)
 
 
 css = """
