@@ -37,9 +37,9 @@ def predict(
 ):
     lcm_text_to_image.init(
         model_id=LCM_DEFAULT_MODEL_OPENVINO,
+        use_openvino=True,
         use_lora=False,
         lcm_lora=lcm_lora,
-        use_openvino=True,
     )
 
     lcm_diffusion_setting = LCMDiffusionSetting()
