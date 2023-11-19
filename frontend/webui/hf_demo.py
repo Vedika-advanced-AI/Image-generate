@@ -37,8 +37,8 @@ def predict(
 ):
     lcm_text_to_image.init(
         model_id=LCM_DEFAULT_MODEL_OPENVINO,
-        use_openvino=False,
-        use_lora=True,
+        use_openvino=True,
+        use_lora=False,
         lcm_lora=lcm_lora,
     )
 
@@ -48,8 +48,8 @@ def predict(
     lcm_diffusion_setting.inference_steps = steps
     lcm_diffusion_setting.seed = seed
     lcm_diffusion_setting.use_seed = True
-    lcm_diffusion_setting.image_width = 384 if is_openvino_device() else 512
-    lcm_diffusion_setting.image_height = 384 if is_openvino_device() else 512
+    lcm_diffusion_setting.image_width = 448 if is_openvino_device() else 512
+    lcm_diffusion_setting.image_height = 448 if is_openvino_device() else 512
     lcm_diffusion_setting.use_openvino = True if is_openvino_device() else False
     start = perf_counter()
     images = lcm_text_to_image.generate(lcm_diffusion_setting)
