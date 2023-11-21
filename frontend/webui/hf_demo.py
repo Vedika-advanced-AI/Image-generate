@@ -138,7 +138,7 @@ with gr.Blocks(css=css) as demo:
             )
         gr.HTML(_get_footer_message())
 
-        inputs = [prompt, steps, seed]
+        inputs = [prompt, steps, seed, seed_checkbox]
         generate_btn.click(fn=predict, inputs=inputs, outputs=image)
 
 
