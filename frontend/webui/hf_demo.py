@@ -35,6 +35,7 @@ def predict(
     prompt,
     steps,
     seed,
+    use_seed,
 ):
     lcm_text_to_image.init(
         model_id=LCM_DEFAULT_MODEL_OPENVINO,
@@ -48,9 +49,9 @@ def predict(
     lcm_diffusion_setting.guidance_scale = 1.0
     lcm_diffusion_setting.inference_steps = steps
     lcm_diffusion_setting.seed = seed
-    lcm_diffusion_setting.use_seed = True
-    lcm_diffusion_setting.image_width = 384 if is_openvino_device() else 512
-    lcm_diffusion_setting.image_height = 384 if is_openvino_device() else 512
+    lcm_diffusion_setting.use_seed = use_seed
+    lcm_diffusion_setting.image_width = 320 if is_openvino_device() else 512
+    lcm_diffusion_setting.image_height = 320 if is_openvino_device() else 512
     lcm_diffusion_setting.use_openvino = True if is_openvino_device() else False
     start = perf_counter()
     images = lcm_text_to_image.generate(lcm_diffusion_setting)
@@ -95,7 +96,7 @@ with gr.Blocks(css=css) as demo:
     with gr.Column(elem_id="container"):
         use_openvino = "- OpenVINO" if is_openvino_device() else ""
         gr.Markdown(
-            f"""# FastSD CPU {use_openvino}
+            f"""# FastSD CPU demo {use_openvino}
                **Device : {DEVICE.upper()} , {get_device_name()}**
             """,
             elem_id="intro",
@@ -120,7 +121,7 @@ with gr.Blocks(css=css) as demo:
                 label="Steps",
                 value=3 if is_openvino_device() else 3,
                 minimum=1,
-                maximum=6,
+                maximum=4,
                 step=1,
             )
             seed = gr.Slider(
@@ -129,6 +130,11 @@ with gr.Blocks(css=css) as demo:
                 maximum=999999999,
                 label="Seed",
                 step=1,
+            )
+            seed_checkbox = gr.Checkbox(
+                label="Use seed",
+                value=False,
+                interactive=True,
             )
         gr.HTML(_get_footer_message())
 
