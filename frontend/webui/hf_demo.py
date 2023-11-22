@@ -50,6 +50,8 @@ def predict(
     lcm_diffusion_setting.inference_steps = steps
     lcm_diffusion_setting.seed = seed
     lcm_diffusion_setting.use_seed = use_seed
+    lcm_diffusion_setting.use_safety_checker = True
+    lcm_diffusion_setting.use_tiny_auto_encoder = True
     lcm_diffusion_setting.image_width = 320 if is_openvino_device() else 512
     lcm_diffusion_setting.image_height = 320 if is_openvino_device() else 512
     lcm_diffusion_setting.use_openvino = True if is_openvino_device() else False
