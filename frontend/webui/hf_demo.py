@@ -42,7 +42,7 @@ def predict(
         use_openvino=True,
         use_lora=False,
         lcm_lora=lcm_lora,
-        use_tiny_auto_encoder=True,
+        use_tiny_auto_encoder=False,
     )
     print(f"prompt - {prompt}")
     lcm_diffusion_setting = LCMDiffusionSetting()
