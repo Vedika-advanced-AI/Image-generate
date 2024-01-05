@@ -23,17 +23,15 @@ class Context:
         device: str = "cpu",
     ) -> Any:
         tick = perf_counter()
+        from state import get_settings
+
+        get_settings().save()
         pprint(settings.lcm_diffusion_setting.model_dump())
         if not settings.lcm_diffusion_setting.lcm_lora:
             return None
         self.lcm_text_to_image.init(
-            settings.lcm_diffusion_setting.lcm_model_id,
-            settings.lcm_diffusion_setting.use_openvino,
             device,
-            settings.lcm_diffusion_setting.use_offline_model,
-            settings.lcm_diffusion_setting.use_tiny_auto_encoder,
-            settings.lcm_diffusion_setting.use_lcm_lora,
-            settings.lcm_diffusion_setting.lcm_lora,
+            settings.lcm_diffusion_setting,
         )
         images = self.lcm_text_to_image.generate(
             settings.lcm_diffusion_setting,
@@ -45,5 +43,5 @@ class Context:
             images=images,
             lcm_diffusion_setting=settings.lcm_diffusion_setting,
         )
-        print(f"Elapsed time : {elapsed:.2f} seconds")
+        print(f"Latency : {elapsed:.2f} seconds")
         return images
