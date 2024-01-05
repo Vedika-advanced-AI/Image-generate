@@ -192,8 +192,9 @@ elif args.realtime:
 
     print("Starting realtime text to image(EXPERIMENTAL)")
     start_realtime_text_to_image(args.share)
-else:
-    from frontend.webui.hf_demo import start_demo_text_to_image
 
-    print("Starting demo text to image")
-    start_demo_text_to_image(False)
+
+from frontend.webui.hf_demo import start_demo_text_to_image
+
+print("Starting demo text to image")
+start_demo_text_to_image(False)
