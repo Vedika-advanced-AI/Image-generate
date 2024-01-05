@@ -37,13 +37,6 @@ def predict(
     seed,
     use_seed,
 ):
-    lcm_text_to_image.init(
-        model_id=LCM_DEFAULT_MODEL_OPENVINO,
-        use_openvino=True,
-        use_lora=False,
-        lcm_lora=lcm_lora,
-        use_tiny_auto_encoder=False,
-    )
     print(f"prompt - {prompt}")
     lcm_diffusion_setting = LCMDiffusionSetting()
     lcm_diffusion_setting.prompt = prompt
@@ -56,6 +49,7 @@ def predict(
     lcm_diffusion_setting.image_width = 320 if is_openvino_device() else 512
     lcm_diffusion_setting.image_height = 320 if is_openvino_device() else 512
     lcm_diffusion_setting.use_openvino = True if is_openvino_device() else False
+    lcm_text_to_image.init(lcm_diffusion_setting)
     start = perf_counter()
     images = lcm_text_to_image.generate(lcm_diffusion_setting)
     latency = perf_counter() - start
