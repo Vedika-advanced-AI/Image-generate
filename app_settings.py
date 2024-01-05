@@ -15,18 +15,9 @@ from copy import deepcopy
 class AppSettings:
     def __init__(self):
         self.config_path = FastStableDiffusionPaths().get_app_settings_path()
-        self._stable_diffsuion_models = get_models_from_text_file(
-            FastStableDiffusionPaths().get_models_config_path(SD_MODELS_FILE)
-        )
-        self._lcm_lora_models = get_models_from_text_file(
-            FastStableDiffusionPaths().get_models_config_path(LCM_LORA_MODELS_FILE)
-        )
-        self._openvino_lcm_models = get_models_from_text_file(
-            FastStableDiffusionPaths().get_models_config_path(OPENVINO_LCM_MODELS_FILE)
-        )
-        self._lcm_models = get_models_from_text_file(
-            FastStableDiffusionPaths().get_models_config_path(LCM_MODELS_FILE)
-        )
+        self._stable_diffsuion_models = ["Lykon/dreamshaper-8"]
+        self._lcm_lora_models = ["latent-consistency/lcm-lora-sdv1-5"]
+        self._openvino_lcm_models = ["rupeshs/sd-turbo-openvino"]
 
     @property
     def settings(self):
