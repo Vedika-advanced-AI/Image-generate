@@ -1,0 +1,7 @@
+env
+*.bak
+*.pyc
+__pycache__
+results
+# excluding user settings for the GUI frontend
+configs/settings.yaml
