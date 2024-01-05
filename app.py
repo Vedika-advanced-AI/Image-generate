@@ -193,55 +193,7 @@ elif args.realtime:
     print("Starting realtime text to image(EXPERIMENTAL)")
     start_realtime_text_to_image(args.share)
 else:
-    context = get_context(InterfaceType.CLI)
-    config = app_settings.settings
+    from frontend.webui.hf_demo import start_demo_text_to_image
 
-    if args.use_openvino:
-        config.lcm_diffusion_setting.lcm_model_id = LCM_DEFAULT_MODEL_OPENVINO
-    else:
-        config.lcm_diffusion_setting.lcm_model_id = args.lcm_model_id
-
-    config.lcm_diffusion_setting.prompt = args.prompt
-    config.lcm_diffusion_setting.image_height = args.image_height
-    config.lcm_diffusion_setting.image_width = args.image_width
-    config.lcm_diffusion_setting.guidance_scale = args.guidance_scale
-    config.lcm_diffusion_setting.number_of_images = args.number_of_images
-    config.lcm_diffusion_setting.inference_steps = args.inference_steps
-    config.lcm_diffusion_setting.seed = args.seed
-    config.lcm_diffusion_setting.use_openvino = args.use_openvino
-    config.lcm_diffusion_setting.use_tiny_auto_encoder = args.use_tiny_auto_encoder
-    config.lcm_diffusion_setting.use_lcm_lora = args.use_lcm_lora
-    config.lcm_diffusion_setting.lcm_lora.base_model_id = args.base_model_id
-    config.lcm_diffusion_setting.lcm_lora.lcm_lora_id = args.lcm_lora_id
-    config.lcm_diffusion_setting.diffusion_task = DiffusionTask.text_to_image.value
-
-    if args.img2img and args.file != "" :
-        config.lcm_diffusion_setting.init_image = Image.open(args.file)
-        config.lcm_diffusion_setting.diffusion_task = DiffusionTask.image_to_image.value
-    elif args.img2img and args.file == "":
-        print("You need to specify a file in img2img mode")
-        exit()
-
-    if args.seed > -1:
-        config.lcm_diffusion_setting.use_seed = True
-    else:
-        config.lcm_diffusion_setting.use_seed = False
-    config.lcm_diffusion_setting.use_offline_model = args.use_offline_model
-    config.lcm_diffusion_setting.use_safety_checker = args.use_safety_checker
-
-    if args.interactive:
-        while True:
-            user_input = input(">>")
-            if user_input == "exit":
-                break
-            config.lcm_diffusion_setting.prompt = user_input
-            context.generate_text_to_image(
-                settings=config,
-                device=DEVICE,
-            )
-
-    else:
-        context.generate_text_to_image(
-            settings=config,
-            device=DEVICE,
-        )
+    print("Starting demo text to image")
+    start_demo_text_to_image(False)
