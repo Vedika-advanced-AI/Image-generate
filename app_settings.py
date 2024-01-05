@@ -18,6 +18,7 @@ class AppSettings:
         self._stable_diffsuion_models = ["Lykon/dreamshaper-8"]
         self._lcm_lora_models = ["latent-consistency/lcm-lora-sdv1-5"]
         self._openvino_lcm_models = ["rupeshs/sd-turbo-openvino"]
+        self._lcm_models = ["stabilityai/sd-turbo"]
 
     @property
     def settings(self):
