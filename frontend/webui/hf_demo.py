@@ -95,7 +95,8 @@ def _get_footer_message() -> str:
         '  © 2023 <a href="https://github.com/rupeshs">'
         " Rupesh Sreeraman</a></p></center>"
     )
-    return footer_msg
+    warning_msg = "<p><b> Please note that this is a minimal demo app.</b> </p><br>"
+    return warning_msg + footer_msg
 
 
 with gr.Blocks(css=css) as demo:
