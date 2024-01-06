@@ -107,6 +107,13 @@ with gr.Blocks(css=css) as demo:
             """,
             elem_id="intro",
         )
+        gr.HTML(
+            f"""
+            <p id="project-links" align="center">
+                <a href='https://github.com/rupeshs/fastsdcpu'><img src='https://img.shields.io/badge/Project-Page-Green'></a>
+            </p> 
+                    """
+        )
 
         with gr.Row():
             with gr.Row():
