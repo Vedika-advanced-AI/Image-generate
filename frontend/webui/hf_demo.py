@@ -42,6 +42,8 @@ def predict(
     print(f"prompt - {prompt}")
     lcm_diffusion_setting = LCMDiffusionSetting()
     lcm_diffusion_setting.diffusion_task = DiffusionTask.text_to_image.value
+    lcm_diffusion_setting.openvino_lcm_model_id = "rupeshs/LCM-dreamshaper-v7-openvino"
+    lcm_diffusion_setting.use_lcm_lora = True
     lcm_diffusion_setting.prompt = prompt
     lcm_diffusion_setting.guidance_scale = 1.0
     lcm_diffusion_setting.inference_steps = steps
@@ -51,17 +53,17 @@ def predict(
     lcm_diffusion_setting.use_tiny_auto_encoder = True
     # lcm_diffusion_setting.image_width = 320 if is_openvino_device() else 512
     # lcm_diffusion_setting.image_height = 320 if is_openvino_device() else 512
-    lcm_diffusion_setting.image_width = 512
-    lcm_diffusion_setting.image_height = 512
+    lcm_diffusion_setting.image_width = 320
+    lcm_diffusion_setting.image_height = 320
     lcm_diffusion_setting.use_openvino = True
-    lcm_diffusion_setting.use_tiny_auto_encoder = False
+    lcm_diffusion_setting.use_tiny_auto_encoder = True
     pprint(lcm_diffusion_setting.model_dump())
     lcm_text_to_image.init(lcm_diffusion_setting=lcm_diffusion_setting)
     start = perf_counter()
     images = lcm_text_to_image.generate(lcm_diffusion_setting)
     latency = perf_counter() - start
     print(f"Latency: {latency:.2f} seconds")
-    return images[0]
+    return images[0].resize([512, 512], PIL.Image.ANTIALIAS)
 
 
 css = """
@@ -123,7 +125,7 @@ with gr.Blocks(css=css) as demo:
         with gr.Accordion("Advanced options", open=False):
             steps = gr.Slider(
                 label="Steps",
-                value=1,
+                value=3,
                 minimum=1,
                 maximum=4,
                 step=1,
