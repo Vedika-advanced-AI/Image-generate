@@ -53,8 +53,8 @@ def predict(
     lcm_diffusion_setting.use_tiny_auto_encoder = True
     # lcm_diffusion_setting.image_width = 320 if is_openvino_device() else 512
     # lcm_diffusion_setting.image_height = 320 if is_openvino_device() else 512
-    lcm_diffusion_setting.image_width = 320
-    lcm_diffusion_setting.image_height = 320
+    lcm_diffusion_setting.image_width = 512
+    lcm_diffusion_setting.image_height = 512
     lcm_diffusion_setting.use_openvino = True
     lcm_diffusion_setting.use_tiny_auto_encoder = True
     pprint(lcm_diffusion_setting.model_dump())
@@ -63,7 +63,7 @@ def predict(
     images = lcm_text_to_image.generate(lcm_diffusion_setting)
     latency = perf_counter() - start
     print(f"Latency: {latency:.2f} seconds")
-    return images[0].resize([512, 512], PIL.Image.ANTIALIAS)
+    return images[0]  # .resize([512, 512], PIL.Image.ANTIALIAS)
 
 
 css = """
