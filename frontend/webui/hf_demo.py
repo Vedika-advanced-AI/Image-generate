@@ -55,7 +55,7 @@ def predict(
     # lcm_diffusion_setting.image_height = 320 if is_openvino_device() else 512
     lcm_diffusion_setting.image_width = 512
     lcm_diffusion_setting.image_height = 512
-    lcm_diffusion_setting.use_openvino = True
+    lcm_diffusion_setting.use_openvino = False
     lcm_diffusion_setting.use_tiny_auto_encoder = True
     pprint(lcm_diffusion_setting.model_dump())
     lcm_text_to_image.init(lcm_diffusion_setting=lcm_diffusion_setting)
@@ -101,7 +101,7 @@ def _get_footer_message() -> str:
 
 with gr.Blocks(css=css) as demo:
     with gr.Column(elem_id="container"):
-        use_openvino = "- OpenVINO" if is_openvino_device() else ""
+        use_openvino = "" if is_openvino_device() else ""
         gr.Markdown(
             f"""# FastSD CPU demo {use_openvino}
                **Device : {DEVICE.upper()} , {get_device_name()}**
