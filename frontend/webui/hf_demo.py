@@ -42,8 +42,8 @@ def predict(
     print(f"prompt - {prompt}")
     lcm_diffusion_setting = LCMDiffusionSetting()
     lcm_diffusion_setting.diffusion_task = DiffusionTask.text_to_image.value
-    lcm_diffusion_setting.openvino_lcm_model_id = "rupeshs/LCM-dreamshaper-v7-openvino"
-    lcm_diffusion_setting.use_lcm_lora = True
+    lcm_diffusion_setting.openvino_lcm_model_id = "rupeshs/hyper-sd-sdxl-1-step"
+    lcm_diffusion_setting.use_lcm_lora = False
     lcm_diffusion_setting.prompt = prompt
     lcm_diffusion_setting.guidance_scale = 1.0
     lcm_diffusion_setting.inference_steps = steps
@@ -53,8 +53,8 @@ def predict(
     lcm_diffusion_setting.use_tiny_auto_encoder = True
     # lcm_diffusion_setting.image_width = 320 if is_openvino_device() else 512
     # lcm_diffusion_setting.image_height = 320 if is_openvino_device() else 512
-    lcm_diffusion_setting.image_width = 512
-    lcm_diffusion_setting.image_height = 512
+    lcm_diffusion_setting.image_width = 768
+    lcm_diffusion_setting.image_height = 768
     lcm_diffusion_setting.use_openvino = False
     lcm_diffusion_setting.use_tiny_auto_encoder = True
     pprint(lcm_diffusion_setting.model_dump())
@@ -133,9 +133,9 @@ with gr.Blocks(css=css) as demo:
         with gr.Accordion("Advanced options", open=False):
             steps = gr.Slider(
                 label="Steps",
-                value=3,
+                value=1,
                 minimum=1,
-                maximum=4,
+                maximum=3,
                 step=1,
             )
             seed = gr.Slider(
