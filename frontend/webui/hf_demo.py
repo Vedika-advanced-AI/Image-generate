@@ -42,7 +42,7 @@ def predict(
     print(f"prompt - {prompt}")
     lcm_diffusion_setting = LCMDiffusionSetting()
     lcm_diffusion_setting.diffusion_task = DiffusionTask.text_to_image.value
-    lcm_diffusion_setting.openvino_lcm_model_id = "rupeshs/sdxs-512-0.9-orig-vae"
+    lcm_diffusion_setting.openvino_lcm_model_id = "rupeshs/SDXL-Lightning-2steps"
     lcm_diffusion_setting.use_lcm_lora = False
     lcm_diffusion_setting.prompt = prompt
     lcm_diffusion_setting.guidance_scale = 1.0
@@ -56,7 +56,7 @@ def predict(
     lcm_diffusion_setting.image_width = 512
     lcm_diffusion_setting.image_height = 512
     lcm_diffusion_setting.use_openvino = False
-    lcm_diffusion_setting.use_tiny_auto_encoder = False
+    lcm_diffusion_setting.use_tiny_auto_encoder = True
     pprint(lcm_diffusion_setting.model_dump())
     lcm_text_to_image.init(lcm_diffusion_setting=lcm_diffusion_setting)
     start = perf_counter()
