@@ -13,4 +13,5 @@ def is_safe_image(
             nsfw_score = label["score"]
         elif label["label"] == "normal":
             normal_score = label["score"]
+    print(f"nsfw_score: {nsfw_score}, normal_score: {normal_score}")
     return normal_score > nsfw_score
