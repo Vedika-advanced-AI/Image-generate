@@ -13,15 +13,17 @@ from PIL import Image
 from backend.models.lcmdiffusion_setting import DiffusionTask
 from backend.safety_check import is_safe_image
 from pprint import pprint
-from transformers import CLIPProcessor, CLIPModel
+from transformers import pipeline
 
 lcm_text_to_image = LCMTextToImage()
 lcm_lora = LCMLora(
     base_model_id="Lykon/dreamshaper-7",
     lcm_lora_id="latent-consistency/lcm-lora-sdv1-5",
 )
-model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
-processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
+classifier = pipeline(
+    "image-classification",
+    model="Falconsai/nsfw_image_detection",
+)
 
 
 # https://github.com/gradio-app/gradio/issues/2635#issuecomment-1423531319
@@ -69,7 +71,10 @@ def predict(
     latency = perf_counter() - start
     print(f"Latency: {latency:.2f} seconds")
     result = images[0]
-    if is_safe_image(model, processor, result):
+    if is_safe_image(
+        classifier,
+        result,
+    ):
         return result  # .resize([512, 512], PIL.Image.ANTIALIAS)
     else:
         print("Unsafe image detected")
