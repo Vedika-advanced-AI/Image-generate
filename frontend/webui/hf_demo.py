@@ -9,15 +9,19 @@ import base64
 from backend.device import get_device_name
 from constants import APP_VERSION
 from backend.device import is_openvino_device
-import PIL
+from PIL import Image
 from backend.models.lcmdiffusion_setting import DiffusionTask
+from backend.safety_check import is_safe_image
 from pprint import pprint
+from transformers import CLIPProcessor, CLIPModel
 
 lcm_text_to_image = LCMTextToImage()
 lcm_lora = LCMLora(
     base_model_id="Lykon/dreamshaper-7",
     lcm_lora_id="latent-consistency/lcm-lora-sdv1-5",
 )
+model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
+processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
 
 
 # https://github.com/gradio-app/gradio/issues/2635#issuecomment-1423531319
@@ -56,7 +60,7 @@ def predict(
     # lcm_diffusion_setting.image_height = 320 if is_openvino_device() else 512
     lcm_diffusion_setting.image_width = 512
     lcm_diffusion_setting.image_height = 512
-    lcm_diffusion_setting.use_openvino = False
+    lcm_diffusion_setting.use_openvino = True
     lcm_diffusion_setting.use_tiny_auto_encoder = False
     pprint(lcm_diffusion_setting.model_dump())
     lcm_text_to_image.init(lcm_diffusion_setting=lcm_diffusion_setting)
@@ -64,7 +68,12 @@ def predict(
     images = lcm_text_to_image.generate(lcm_diffusion_setting)
     latency = perf_counter() - start
     print(f"Latency: {latency:.2f} seconds")
-    return images[0]  # .resize([512, 512], PIL.Image.ANTIALIAS)
+    result = images[0]
+    if is_safe_image(model, processor, result):
+        return result  # .resize([512, 512], PIL.Image.ANTIALIAS)
+    else:
+        print("Unsafe image detected")
+        return Image.new("RGB", (512, 512), (0, 0, 0))
 
 
 css = """
