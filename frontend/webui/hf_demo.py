@@ -42,7 +42,7 @@ def predict(
     print(f"prompt - {prompt}")
     lcm_diffusion_setting = LCMDiffusionSetting()
     lcm_diffusion_setting.diffusion_task = DiffusionTask.text_to_image.value
-    lcm_diffusion_setting.openvino_lcm_model_id = "rupeshs/sd-turbo-openvino"
+    lcm_diffusion_setting.openvino_lcm_model_id = "rupeshs/hyper-sd-sdxl-1-step"
     lcm_diffusion_setting.use_lcm_lora = False
     lcm_diffusion_setting.prompt = prompt
     lcm_diffusion_setting.guidance_scale = 1.0
@@ -55,15 +55,15 @@ def predict(
     # lcm_diffusion_setting.image_height = 320 if is_openvino_device() else 512
     lcm_diffusion_setting.image_width = 512
     lcm_diffusion_setting.image_height = 512
-    lcm_diffusion_setting.use_openvino = True
-    lcm_diffusion_setting.use_tiny_auto_encoder = True
+    lcm_diffusion_setting.use_openvino = False
+    lcm_diffusion_setting.use_tiny_auto_encoder = False
     pprint(lcm_diffusion_setting.model_dump())
     lcm_text_to_image.init(lcm_diffusion_setting=lcm_diffusion_setting)
     start = perf_counter()
     images = lcm_text_to_image.generate(lcm_diffusion_setting)
     latency = perf_counter() - start
     print(f"Latency: {latency:.2f} seconds")
-    return images[0]  # .resize([512, 512], PIL.Image.ANTIALIAS)
+    return images[0]
 
 
 css = """
