@@ -60,10 +60,10 @@ def predict(
     lcm_diffusion_setting.use_tiny_auto_encoder = False
     # lcm_diffusion_setting.image_width = 320 if is_openvino_device() else 512
     # lcm_diffusion_setting.image_height = 320 if is_openvino_device() else 512
-    lcm_diffusion_setting.image_width = 320
-    lcm_diffusion_setting.image_height = 320
+    lcm_diffusion_setting.image_width = 512
+    lcm_diffusion_setting.image_height = 512
     lcm_diffusion_setting.use_openvino = True
-    lcm_diffusion_setting.use_tiny_auto_encoder = False
+    lcm_diffusion_setting.use_tiny_auto_encoder = True
     pprint(lcm_diffusion_setting.model_dump())
     lcm_text_to_image.init(lcm_diffusion_setting=lcm_diffusion_setting)
     start = perf_counter()
@@ -75,7 +75,7 @@ def predict(
         classifier,
         result,
     ):
-        return result.resize([512, 512], Image.LANCZOS)
+        return result  # .resize([512, 512], Image.LANCZOS)
     else:
         print("Unsafe image detected")
         return Image.new("RGB", (512, 512), (0, 0, 0))
