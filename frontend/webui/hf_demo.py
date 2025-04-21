@@ -49,7 +49,7 @@ def predict(
     lcm_diffusion_setting = LCMDiffusionSetting()
     lcm_diffusion_setting.lcm_model_id = "rupeshs/hyper-sd-sdxl-1-step"
     lcm_diffusion_setting.diffusion_task = DiffusionTask.text_to_image.value
-    lcm_diffusion_setting.openvino_lcm_model_id = "rupeshs/LCM-dreamshaper-v7-openvino"
+    lcm_diffusion_setting.openvino_lcm_model_id = "rupeshs/sd-turbo-openvino"
     lcm_diffusion_setting.use_lcm_lora = False
     lcm_diffusion_setting.prompt = prompt
     lcm_diffusion_setting.guidance_scale = 1.0
@@ -107,7 +107,7 @@ footer {
 def _get_footer_message() -> str:
     version = f"<center><p> {APP_VERSION} "
     footer_msg = version + (
-        '  © 2023 <a href="https://github.com/rupeshs">'
+        '  © 2025 <a href="https://github.com/rupeshs">'
         " Rupesh Sreeraman</a></p></center>"
     )
     warning_msg = "<p><b> Please note that this is a minimal demo app.</b> </p><br>"
@@ -119,7 +119,7 @@ with gr.Blocks(css=css) as demo:
         use_openvino = "" if is_openvino_device() else ""
         gr.Markdown(
             f"""# FastSD CPU demo {use_openvino}
-               **Device : {DEVICE.upper()} , {get_device_name()} | OpenVINO **
+               **Device : {DEVICE.upper()} , {get_device_name()} | OpenVINO**
             """,
             elem_id="intro",
         )
@@ -148,9 +148,9 @@ with gr.Blocks(css=css) as demo:
         with gr.Accordion("Advanced options", open=False):
             steps = gr.Slider(
                 label="Steps",
-                value=3,
+                value=1,
                 minimum=1,
-                maximum=4,
+                maximum=3,
                 step=1,
             )
             seed = gr.Slider(
