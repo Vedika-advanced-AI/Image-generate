@@ -1,6 +1,8 @@
-from os import environ
+from os import environ, cpu_count
 
-APP_VERSION = "v1.0.0 beta 23"
+cpu_cores = cpu_count()
+cpus = cpu_cores // 2 if cpu_cores else 0
+APP_VERSION = "v1.0.0 beta 200"
 LCM_DEFAULT_MODEL = "stabilityai/sd-turbo"
 LCM_DEFAULT_MODEL_OPENVINO = "rupeshs/sd-turbo-openvino"
 APP_NAME = "FastSD CPU"
@@ -16,3 +18,8 @@ TAESDXL_MODEL = "madebyollin/taesdxl"
 TAESD_MODEL_OPENVINO = "deinferno/taesd-openvino"
 LCM_MODELS_FILE = "lcm-models.txt"
 TAESDXL_MODEL_OPENVINO = "rupeshs/taesdxl-openvino"
+LORA_DIRECTORY = "lora_models"
+CONTROLNET_DIRECTORY = "controlnet_models"
+MODELS_DIRECTORY = "models"
+GGUF_THREADS = environ.get("GGUF_THREADS", cpus)
+TAEF1_MODEL_OPENVINO = "rupeshs/taef1-openvino"
