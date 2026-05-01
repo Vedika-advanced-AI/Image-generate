@@ -11,7 +11,7 @@ from constants import APP_VERSION
 from backend.device import is_openvino_device
 from PIL import Image
 from backend.models.lcmdiffusion_setting import DiffusionTask
-from backend.safety_check import is_safe_image
+from backend.safety_checker import SafetyChecker
 from pprint import pprint
 from transformers import pipeline
 
@@ -24,6 +24,7 @@ classifier = pipeline(
     "image-classification",
     model="Falconsai/nsfw_image_detection",
 )
+safety_checker = SafetyChecker()
 
 
 # https://github.com/gradio-app/gradio/issues/2635#issuecomment-1423531319
@@ -71,8 +72,7 @@ def predict(
     latency = perf_counter() - start
     print(f"Latency: {latency:.2f} seconds")
     result = images[0]
-    if is_safe_image(
-        classifier,
+    if safety_checker.is_safe(
         result,
     ):
         return result  # .resize([512, 512], Image.LANCZOS)
@@ -171,6 +171,6 @@ with gr.Blocks(css=css) as demo:
         generate_btn.click(fn=predict, inputs=inputs, outputs=image)
 
 
-if __name__ == "__main__":
+def start_demo():
     demo.queue()
     demo.launch(share=False)
