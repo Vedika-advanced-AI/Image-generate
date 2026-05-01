@@ -19,4 +19,4 @@ EXPOSE 7860
 
 ENV GRADIO_SERVER_NAME="0.0.0.0"
 
-CMD ["python", "src/frontend/webui/hf_demo.py"]
+CMD ["python", "src/app.py","--hfdemo"]
