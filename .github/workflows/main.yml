@@ -7,11 +7,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # यह कमांड पूरी हिस्ट्री डाउनलोड करेगा
       - name: Push to hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           git config --global user.email "bot@github.com"
           git config --global user.name "GitHub Action"
-          # गिटहब की फाइलों को हगिंग फेस पर जबरदस्ती पुश करें
           git push -f https://oauth2:$HF_TOKEN@huggingface.co/spaces/Veda-Labs/Vedika-gen-2.0-img-gen main
