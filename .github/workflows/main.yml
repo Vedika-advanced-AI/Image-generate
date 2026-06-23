@@ -7,18 +7,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Fix LFS and Push to hub
+      - name: Push to hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           git config --global user.email "bot@github.com"
           git config --global user.name "GitHub Action"
           
-          # जो इमेज फाइलें गायब हैं, उन्हें डिप्लॉयमेंट से हटा दें ताकि हगिंग फेस ब्लॉक न करे
-          git rm -rf docs/images/ || true
-          git commit -m "Remove missing LFS images to fix HF sync error" || true
+          # 1. समस्या वाली इमेजेज को वर्किंग फोल्डर से पूरी तरह हटा दें
+          rm -rf docs/images/
           
-          # अब आपका मुख्य कोड और फाइलें बिना किसी रुकावट के पुश हो जाएंगी
-          git push -f https://oauth2:$HF_TOKEN@huggingface.co/spaces/Veda-Labs/Vedika-gen-2.0-img-gen main
+          # 2. एक बिल्कुल नई ब्रांच (hf-deploy) बनाएं, जिसमें कोई पुरानी हिस्ट्री न हो
+          git checkout --orphan hf-deploy
+          
+          # 3. सिर्फ मौजूदा साफ फाइलों को जोड़ें
+          git add .
+          git commit -m "Clean deploy to Hugging Face without LFS history"
+          
+          # 4. इस साफ ब्रांच को हगिंग फेस के main पर जबरदस्ती (force) डाल दें
+          git push -f https://oauth2:$HF_TOKEN@huggingface.co/spaces/Veda-Labs/Vedika-gen-2.0-img-gen hf-deploy:main
