@@ -9,19 +9,16 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          lfs: true
-      - name: Push to hub
+      - name: Fix LFS and Push to hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           git config --global user.email "bot@github.com"
           git config --global user.name "GitHub Action"
           
-          # मिसिंग इमेज वाले एरर को इग्नोर करने की कमांड
-          git config lfs.allowincompletepush true
+          # जो इमेज फाइलें गायब हैं, उन्हें डिप्लॉयमेंट से हटा दें ताकि हगिंग फेस ब्लॉक न करे
+          git rm -rf docs/images/ || true
+          git commit -m "Remove missing LFS images to fix HF sync error" || true
           
-          # LFS फाइलें पुश करें (|| true का मतलब है कि अगर कोई फाइल नहीं मिली, तो भी प्रोसेस आगे बढ़ेगी)
-          git lfs push --all https://oauth2:$HF_TOKEN@huggingface.co/spaces/Veda-Labs/Vedika-gen-2.0-img-gen || true
-          
-          # आपका मेन कोड फोर्स पुश करें
+          # अब आपका मुख्य कोड और फाइलें बिना किसी रुकावट के पुश हो जाएंगी
           git push -f https://oauth2:$HF_TOKEN@huggingface.co/spaces/Veda-Labs/Vedika-gen-2.0-img-gen main
