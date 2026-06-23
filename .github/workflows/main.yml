@@ -13,10 +13,5 @@ jobs:
         run: |
           git config --global user.email "bot@github.com"
           git config --global user.name "GitHub Action"
-          # हगिंग फेस से फाइलें फेच करें
-          git remote add hf https://oauth2:$HF_TOKEN@huggingface.co/spaces/Veda-Labs/Vedika-gen-2.0-img-gen
-          git fetch hf main
-          # रिमोट फाइलों को मर्ज करें (allow-unrelated-histories ज़रूरी है)
-          git merge hf/main --allow-unrelated-histories -m "Merge HF and GitHub"
-          # अब पुश करें
-          git push https://oauth2:$HF_TOKEN@huggingface.co/spaces/Veda-Labs/Vedika-gen-2.0-img-gen main
+          # गिटहब की फाइलों को हगिंग फेस पर जबरदस्ती पुश करें
+          git push -f https://oauth2:$HF_TOKEN@huggingface.co/spaces/Veda-Labs/Vedika-gen-2.0-img-gen main
