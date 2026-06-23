@@ -8,11 +8,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # यह कमांड पूरी हिस्ट्री डाउनलोड करेगा
+          fetch-depth: 0
+          lfs: true  # यह लाइन बहुत जरूरी है - यह LFS फाइलों को डाउनलोड करेगी
       - name: Push to hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           git config --global user.email "bot@github.com"
           git config --global user.name "GitHub Action"
+          # LFS डेटा को हगिंग फेस पर पुश करें
+          git lfs push --all https://oauth2:$HF_TOKEN@huggingface.co/spaces/Veda-Labs/Vedika-gen-2.0-img-gen
+          # फिर फोर्स पुश करें
           git push -f https://oauth2:$HF_TOKEN@huggingface.co/spaces/Veda-Labs/Vedika-gen-2.0-img-gen main
